@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import ProductForm from "@/components/ProductForm.vue";
+import ProductForm from "@/components/produk/ProductForm.vue";
 import { ref } from "vue";
 
 const produk = ref({
