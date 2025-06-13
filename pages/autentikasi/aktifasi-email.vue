@@ -33,7 +33,7 @@
       </p>
 
       <NuxtLink 
-        to="/autentikasi/login"
+        to="/autentikasi/register"
         class="block w-full bg-teal-500 text-white font-bold py-3 rounded-lg hover:bg-teal-600 transition-colors duration-300"
       >
         Kembali

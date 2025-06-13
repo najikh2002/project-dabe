@@ -24,8 +24,9 @@
 
         <!-- Tombol Google (opsional, bisa aktifkan nanti) -->
         <button
+          @click="registerWithGoogle"
           class="py-2 w-full shadow-md border border-gray-300 font-bold rounded-md flex items-center justify-center text-[#7C817FC2] mb-5">
-          <img src="/assets/img/logo/google.png" alt="" />Google
+          <img src="/assets/img/logo/google.png" alt="Google logo" class="mr-2 h-10 w-10" />Daftar dengan Google
         </button>
 
         <div class="relative mb-6">
@@ -116,18 +117,25 @@ const registerUser = async () => {
       }
       error.value = errorMessage;
     } else {
-      success.value = 'Registrasi berhasil! Anda akan diarahkan ke halaman login.'
-      // Arahkan ke halaman login setelah beberapa saat agar pengguna bisa membaca pesan sukses
-      setTimeout(() => {
-        navigateTo({
-          path: '/autentikasi/aktifasi-email',
-          query: { email: email.value, username: name.value } // Kirim email dan username sebagai query params
-        });
-      }, 2000); // Tunggu 2 detik sebelum redirect
+      success.value = 'Registrasi berhasil! Aktifkan akun Anda di email Anda.'
+      // Langsung arahkan ke halaman aktivasi email.
+      // Menggunakan 'await' memastikan bahwa proses navigasi dimulai
+      // dan ditunggu sebelum fungsi registerUser dianggap selesai.
+      await navigateTo({
+        path: '/autentikasi/aktifasi-email',
+      });
     }
   } catch (err) {
     // Ini menangkap error yang tidak terduga dari useFetch atau error javascript lainnya
     error.value = err.message || 'Terjadi kesalahan saat melakukan registrasi.'
   }
+};
+
+const registerWithGoogle = () => {
+  // Endpoint API backend Anda yang akan memulai alur OAuth Google
+  // Gantilah '/api/auth/google/redirect' dengan endpoint Anda yang sebenarnya jika berbeda
+  const googleLoginUrl = `${config.public.apiBase}/api/register/google`;
+  // Mengarahkan pengguna ke URL otentikasi Google yang ditangani oleh backend
+  window.location.href = googleLoginUrl;
 }
 </script>

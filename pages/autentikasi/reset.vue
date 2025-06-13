@@ -40,7 +40,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useRoute, useRuntimeConfig } from '#app'
+import { useRoute, useRuntimeConfig, navigateTo } from '#app'
 
 const route = useRoute()
 const config = useRuntimeConfig()
@@ -59,14 +59,14 @@ console.log('Password Confirmation:', passwordConfirmation.value)
 
 const resetPassword = async () => {
   try {
-    const { data, error: fetchError, status } = await useFetch('/password/reset', {
+    const { data, error: fetchError, status } = await useFetch('api/password/reset', {
       baseURL: config.public.apiBase,
       method: 'POST',
       body: {
         email: email.value,
         token: token.value,
         password: password.value,
-        konfirmasi_password: passwordConfirmation.value
+        password_confirmation: passwordConfirmation.value
       }
     })
 
@@ -74,6 +74,10 @@ const resetPassword = async () => {
 
     success.value = 'Password berhasil direset!'
     error.value = ''
+    // Arahkan ke halaman login setelah beberapa saat
+    setTimeout(() => {
+      navigateTo('/autentikasi/login')
+    }, 2000) // Tunggu 2 detik sebelum redirect
   } catch (err) {
     error.value = err.message
     success.value = ''

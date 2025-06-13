@@ -1,7 +1,7 @@
 <template>
     <div class="bg-slate-50 min-h-screen p-4 sm:p-8 flex flex-col items-center font-sans">
         <div class="w-full max-w-2xl mb-4">
-            <NuxtLink to="/penjual/dashboard"
+            <NuxtLink to="/dashboard"
                 class="flex items-center text-gray-600 hover:text-gray-900 font-semibold transition-colors">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -132,7 +132,7 @@ const submitWithdrawal = async () => {
     form.value = { bank: null, accountNumber: '', amount: '', agreeToTerms: false };
 
     // Arahkan ke halaman status
-    navigateTo('/penjual/withdraw-status');
+    navigateTo('/dashboard/withdraw/withdraw-sukses');
 };
 
 useHead({

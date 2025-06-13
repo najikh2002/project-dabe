@@ -51,7 +51,7 @@ const sendResetLink = async () => {
     success.value = ''
     error.value = ''
 
-    await $fetch('/password/forgot', {
+    await $fetch('api/password/forgot', {
       baseURL: config.public.apiBase,
       method: 'POST',
       body: { email: email.value }

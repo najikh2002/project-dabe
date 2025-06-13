@@ -1,4 +1,5 @@
 <template>
+    <AppHeaderPenjual />
     <div class="bg-slate-100 min-h-screen p-4 sm:p-6 md:p-8 font-sans">
         <div class="max-w-7xl mx-auto space-y-8">
 
@@ -81,7 +82,7 @@
                 <h2 class="text-xl font-bold text-gray-800 mb-6 text-center">Penjualan 3 Bulan Terakhir</h2>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                     <div class="h-64 md:h-72">
-                        <AppChartsDasboardDonut />
+                        <AppChartsDashboardDonut />
                     </div>
                     <div class="h-64 md:h-72">
                         <AppChartsDashboardBar />
@@ -96,16 +97,55 @@
 
 <script setup>
 // Bagian script tetap sama
-import { ref } from 'vue';
-import { navigateTo } from '#app'; // Import navigateTo untuk navigasi
+import { ref, onMounted } from 'vue';
+import { navigateTo, useRuntimeConfig } from '#app'; // Import navigateTo untuk navigasi dan useRuntimeConfig
 
-const saldo = ref(512000);
-const totalPenjualan = ref(12000000);
-const pendapatanBulanan = ref(2000000);
+const config = useRuntimeConfig();
+
+const saldo = ref(0);
+const totalPenjualan = ref(0);
+const pendapatanBulanan = ref(0);
 const pesanan = ref(25);
 const dalamProses = ref(10);
 const tersedia = ref(7);
 const produkTerjual = ref(1000);
+const isLoading = ref(true);
+const error = ref(null);
+
+const fetchFinancialData = async () => {
+    isLoading.value = true;
+    error.value = null;
+    try {
+        const authToken = localStorage.getItem('authToken');
+        if (!authToken) {
+            throw new Error('Token otentikasi tidak ditemukan. Silakan login kembali.');
+        }
+
+        // Ganti '/api/dashboard/keuangan' dengan endpoint API Anda yang sebenarnya
+        const { data: financialData, error: fetchError } = await useFetch('/api/dashboard/keuangan', {
+            baseURL: config.public.apiBase,
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+
+        if (fetchError.value) {
+            throw new Error(fetchError.value.data?.message || fetchError.value.message || 'Gagal mengambil data keuangan.');
+        }
+
+        saldo.value = financialData.value?.saldo || 0;
+        totalPenjualan.value = financialData.value?.totalPenjualan || 0;
+        pendapatanBulanan.value = financialData.value?.pendapatanBulanan || 0;
+
+    } catch (err) {
+        error.value = err.message;
+        console.error("Error mengambil data keuangan:", err);
+        // Anda bisa menampilkan pesan error ini di template jika diperlukan
+    } finally {
+        isLoading.value = false;
+    }
+};
 
 const formatCompactNumber = (num) => {
     if (num === null || num === undefined) return '0';
@@ -114,8 +154,13 @@ const formatCompactNumber = (num) => {
     return num.toString();
 };
 const handleWithdraw = () => {
-    navigateTo('/penjual/withdraw'); // Arahkan ke halaman withdraw
+    navigateTo('/dashboard/withdraw'); // Arahkan ke halaman withdraw di dalam dashboard
 };
+
+onMounted(() => {
+    fetchFinancialData();
+});
+
 useHead({ title: 'Dashboard - DABE' });
 </script>
 
