@@ -1,48 +1,49 @@
 <template>
   <div class="w-screen h-screen bg-[conic-gradient(from_22deg,#41b49f_50%,#22AB97_50%)]">
-    <NuxtLink to="/" class="absolute top-6 left-6 sm:top-8 sm:left-8 z-20">
+    <NuxtLink to="/" class="absolute top-4 left-4 sm:top-6 sm:left-6 z-20">
       <img src="/assets/img/logo/dabe_putih.png" alt="DABE Logo" class="h-10 sm:h-12 w-auto">
     </NuxtLink>
 
     <div class="min-h-screen flex justify-center items-center font-[Poppins]">
-      <div class="p-8 bg-white flex flex-col gap-4 z-10 rounded-md w-full max-w-[430px]">
-        <div class="flex flex-col gap-4">
-          <h1 class="text-xl font-bold text-center">
+      <div class="p-6 sm:p-8 bg-white flex flex-col gap-3 sm:gap-4 z-10 rounded-xl shadow-xl w-full max-w-md">
+        <div class="flex flex-col gap-3 sm:gap-4">
+          <h1 class="text-lg sm:text-xl font-bold text-center">
             Selamat Datang di <span class="text-[#22AB97]">DABE!</span>
           </h1>
 
           <button
-            class="py-2 w-full shadow-md border border-gray-300 font-bold rounded-md flex items-center justify-center text-[#7C817FC2] mb-2">
-            <img src="/assets/img/logo/google.png" alt="" />Google
+            @click="loginWithGoogle"
+            class="py-2 sm:py-2.5 w-full shadow-md border border-gray-300 font-semibold rounded-md flex items-center justify-center text-xs sm:text-sm text-gray-700 hover:bg-gray-50 transition-colors mb-1 sm:mb-2">
+            <img src="/assets/img/logo/google.png" alt="Google logo" class="mr-2 h-7 w-7 sm:h-8 sm:w-8" />Masuk dengan Google
           </button>
 
-          <div class="relative mb-4">
+          <div class="relative mb-2 sm:mb-4">
             <hr />
             <p
-              class="absolute bg-white px-3 text-sm left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-500">
+              class="absolute bg-white px-2 sm:px-3 text-xs sm:text-sm left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-500">
               atau</p>
           </div>
         </div>
 
-        <div class="space-y-5">
-          <div class="flex flex-col gap-1">
-            <label class="text-sm text-gray-500">Email</label>
+        <form @submit.prevent="loginUser" class="space-y-4 sm:space-y-5">
+          <div class="flex flex-col gap-0.5 sm:gap-1">
+            <label for="email" class="text-xs sm:text-sm text-gray-500">Email</label>
             <input v-model="email" type="email"
-              class="bg-[#48967E0F] border p-3 font-semibold rounded-md shadow-md outline-none focus:border-[#22AB97]"
-              placeholder="context@dabe.com" />
+              class="bg-[#48967E0F] border p-2.5 sm:p-3 text-sm sm:text-base font-semibold rounded-md shadow-sm outline-none focus:border-[#22AB97] focus:ring-1 focus:ring-[#22AB97]"
+              placeholder="contoh@dabe.com" id="email" required />
           </div>
 
-          <div class="flex flex-col gap-1">
-            <label class="text-sm text-gray-500">Kata Sandi</label>
+          <div class="flex flex-col gap-0.5 sm:gap-1">
+            <label for="password" class="text-xs sm:text-sm text-gray-500">Kata Sandi</label>
             <input v-model="password" type="password"
-              class="bg-[#48967E0F] border p-3 font-semibold rounded-md shadow-md outline-none focus:border-[#22AB97]"
-              placeholder="*********" />
-            <NuxtLink to="/autentikasi/ganti" class="text-right text-xs text-[#22AB97]">Lupa Kata Sandi?</NuxtLink>
+              class="bg-[#48967E0F] border p-2.5 sm:p-3 text-sm sm:text-base font-semibold rounded-md shadow-sm outline-none focus:border-[#22AB97] focus:ring-1 focus:ring-[#22AB97]"
+              placeholder="*********" id="password" required />
+            <NuxtLink to="/autentikasi/ganti" class="text-right text-xs sm:text-sm text-[#22AB97] hover:underline">Lupa Kata Sandi?</NuxtLink>
           </div>
 
-          <div class="flex flex-col gap-4">
-            <button @click="loginUser"
-              class="py-2 w-full font-bold rounded-md bg-[#22AB97] text-white hover:bg-[#1b9786]">
+          <div class="flex flex-col gap-3 sm:gap-4 pt-2">
+            <button type="submit" :disabled="isLoading"
+              class="py-2 sm:py-2.5 w-full font-bold rounded-md bg-[#22AB97] text-white hover:bg-[#1b9786] transition-colors text-sm sm:text-base disabled:opacity-70">
               Masuk
             </button>
 
@@ -50,9 +51,9 @@
               Belum punya akun DABE? <NuxtLink to="/autentikasi/register" class="text-[#22AB97]">Buat</NuxtLink>
             </p>
           </div>
-        </div>
+        </form>
 
-        <p v-if="error" class="text-sm text-red-500 text-center mt-2">{{ error }}</p>
+        <p v-if="error" class="text-xs sm:text-sm text-red-500 text-center mt-1 sm:mt-2">{{ error }}</p>
       </div>
     </div>
   </div>
@@ -60,11 +61,13 @@
 
 <script setup>
 import { ref } from 'vue'
+import { navigateTo, useRuntimeConfig } from '#app' // Pastikan navigateTo diimpor
+
 const email = ref('')
 const password = ref('')
 const error = ref('')
+const isLoading = ref(false) // Tambahkan state isLoading
 const config = useRuntimeConfig()
-
 const loginUser = async () => {
   try {
     error.value = ''
@@ -112,5 +115,11 @@ const loginUser = async () => {
   } catch (err) {
     error.value = err?.data?.message || 'Login gagal. Periksa kembali email dan password.'
   }
+}
+
+const loginWithGoogle = () => {
+  // Endpoint API backend Anda yang akan memulai alur OAuth Google
+  const googleLoginUrl = `${config.public.apiBase}/api/login/google`; // Sesuaikan jika endpoint berbeda
+  window.location.href = googleLoginUrl;
 }
 </script>

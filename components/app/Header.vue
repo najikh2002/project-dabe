@@ -48,10 +48,10 @@
                     </NuxtLink>
                     <div class="relative">
                         <button @click="userDropdownOpen = !userDropdownOpen"
-                            class="flex items-center text-white hover:text-teal-200 focus:outline-none">
+                            class="flex items-center text-white hover:text-teal-200 focus:outline-none" v-if="isLoggedIn">
                             <img class="w-10 h-10 rounded-full border-2 border-white object-cover"
                                 src="https://via.placeholder.com/100" alt="User Avatar" />
-                            <span class="ml-2 font-medium">{{ username }}</span>
+                            <span class="ml-2 font-medium">{{ loggedInUsername }}</span>
                             <svg class="w-4 h-4 ml-1 fill-current" viewBox="0 0 20 20">
                                 <path
                                     d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
@@ -68,6 +68,12 @@
                                     Out</a>
                             </div>
                         </transition>
+                    </div>
+                    <div v-if="!isLoggedIn" class="flex items-center space-x-2">
+                        <NuxtLink to="/autentikasi/login"
+                            class="px-4 py-2 text-sm font-medium text-teal-500 bg-white rounded-md hover:bg-gray-100 transition-colors">
+                            Login
+                        </NuxtLink>
                     </div>
                 </div>
                 <div class="md:hidden flex items-center">
@@ -106,11 +112,17 @@
                         </svg>
                         Keranjang
                     </NuxtLink>
-                    <NuxtLink to="/profil"
+                    <NuxtLink v-if="isLoggedIn" to="/profil"
                         class="flex items-center px-4 py-3 text-white hover:bg-teal-600 transition-colors duration-150">
                         <img class="w-8 h-8 rounded-full border-2 border-white object-cover mr-3"
                             src="https://via.placeholder.com/100" alt="User Avatar" />
-                        <span class="font-medium">{{ username }}</span>
+                        <span class="font-medium">{{ loggedInUsername }}</span>
+                    </NuxtLink>
+                    <a v-if="isLoggedIn" @click="logout" href="#"
+                        class="block px-4 py-3 text-white hover:bg-teal-600 transition-colors duration-150">Log Out</a>
+                    <NuxtLink v-if="!isLoggedIn" to="/autentikasi/login"
+                        class="block px-4 py-3 text-white hover:bg-teal-600 transition-colors duration-150">
+                        Login
                     </NuxtLink>
                 </div>
             </div>
@@ -121,30 +133,50 @@
 <script>
 export default {
     name: 'Navbar',
-    props: {
-        username: {
-            type: String,
-            default: 'Pengguna' // Nilai default jika username tidak diberikan
-        }
-    },
     data() {
         return {
             mobileMenuOpen: false,
             userDropdownOpen: false,
+            isLoggedIn: false,
+            loggedInUsername: 'Pengguna'
         };
     },
+    watch: {
+        '$route'() {
+            // Panggil checkLoginStatus setiap kali rute berubah.
+            // Ini memastikan header diperbarui setelah navigasi, misalnya setelah login.
+            this.checkLoginStatus();
+        }
+    },
+    mounted() {
+        this.checkLoginStatus();
+        // Dengar perubahan localStorage dari tab/jendela lain
+        window.addEventListener('storage', this.checkLoginStatus);
+    },
+    beforeUnmount() {
+        // Hapus event listener saat komponen dihancurkan
+        window.removeEventListener('storage', this.checkLoginStatus);
+    },
     methods: {
+        checkLoginStatus() {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                this.isLoggedIn = true;
+                // Asumsikan username juga disimpan di localStorage saat login
+                this.loggedInUsername = localStorage.getItem('username') || 'Pengguna';
+            } else {
+                this.isLoggedIn = false;
+                this.loggedInUsername = 'Pengguna';
+            }
+        },
         logout() {
-            // Di sini Anda bisa menambahkan logika untuk membersihkan sesi atau token pengguna
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('username'); // Hapus juga username jika disimpan
+            this.isLoggedIn = false;
+            this.loggedInUsername = 'Pengguna';
+            this.userDropdownOpen = false;
             console.log('User logged out');
-            this.userDropdownOpen = false; // Tutup dropdown setelah logout
-            
-            // Arahkan pengguna ke halaman login
-            // Jika menggunakan Nuxt 2 atau Vue Router standar:
             this.$router.push('/autentikasi/login');
-            // Jika Anda berada dalam konteks Nuxt 3 <script setup> dan ingin menggunakan navigateTo,
-            // Anda perlu mengimpornya dan mungkin merestrukturisasi sedikit,
-            // tetapi untuk Options API seperti ini, this.$router.push adalah cara yang umum.
         }
     }
 };

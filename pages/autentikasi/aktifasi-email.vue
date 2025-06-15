@@ -1,32 +1,16 @@
 <template>
-  <div class="bg-slate-100 min-h-screen flex items-center justify-center p-4 font-sans">
-    <div class="bg-white p-8 rounded-xl shadow-xl max-w-md w-full text-center">
+  <div class="bg-slate-100 min-h-screen flex items-center justify-center p-4 sm:p-6 font-sans">
+    <div class="bg-white p-6 sm:p-8 rounded-xl shadow-xl max-w-md w-full text-center">
       
-      <div class="mx-auto mb-6 w-24 h-24">
-        <img src="/assets/img/logo/dabe_hijau.png"" alt="Email Verification Icon" class="w-full h-full" />
-          <defs>
-            <linearGradient id="emailGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#5eead4;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#14b8a6;stop-opacity:1" />
-            </linearGradient>
-            <linearGradient id="checkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#a7f3d0;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#34d399;stop-opacity:1" />
-            </linearGradient>
-          </defs>
-          <g transform="translate(0, 5)">
-            <path d="M10 25 H90 V70 H10 Z" fill="#f0fdfa" stroke="url(#emailGradient)" stroke-width="4" rx="5"></path>
-            <path d="M10 28 L50 55 L90 28" fill="none" stroke="url(#emailGradient)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
-            <circle cx="75" cy="75" r="20" fill="white" stroke="#34d399" stroke-width="3"></circle>
-            <path d="M65 75 L73 83 L85 68" stroke="url(#checkGradient)" stroke-width="5" fill="none" stroke-linecap="round"></path>
-          </g>
+      <div class="mx-auto mb-4 sm:mb-6 w-20 h-20 sm:w-24 sm:h-24">
+        <img src="/assets/img/logo/dabe_hijau.png" alt="DABE Logo Verifikasi" class="w-full h-full object-contain" />
       </div>
 
-      <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">
+      <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-3 sm:mb-4">
         Verifikasi Email Anda
       </h1>
 
-      <p class="text-gray-600 mb-8 px-4">
+      <p class="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8 px-2 sm:px-4">
         Terima kasih <strong class="font-semibold text-gray-900">{{ usernameFromRoute }}</strong> telah mendaftar. Kami telah mengirimkan email verifikasi ke 
         <strong class="font-semibold text-gray-900">{{ emailFromRoute }}</strong>. 
         Silakan periksa kotak masuk dan klik tautan untuk mengaktifkan akun Anda.
@@ -34,12 +18,12 @@
 
       <NuxtLink 
         to="/autentikasi/register"
-        class="block w-full bg-teal-500 text-white font-bold py-3 rounded-lg hover:bg-teal-600 transition-colors duration-300"
+        class="block w-full bg-teal-500 text-white font-semibold sm:font-bold py-2.5 sm:py-3 rounded-lg hover:bg-teal-600 transition-colors duration-300 text-sm sm:text-base"
       >
         Kembali
       </NuxtLink>
 
-      <div class="mt-8 text-sm text-gray-500">
+      <div class="mt-6 sm:mt-8 text-xs sm:text-sm text-gray-500">
         <span>Belum menerima email? </span>
         <button @click="resendEmail" class="font-semibold text-teal-600 hover:underline focus:outline-none">
           Kirim Ulang Email

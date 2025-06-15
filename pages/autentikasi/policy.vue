@@ -1,21 +1,21 @@
 <template>
-    <div class="bg-teal-100 min-h-screen flex items-center justify-center p-4 font-sans">
-        <NuxtLink to="/" class="absolute top-6 left-6 sm:top-8 sm:left-8">
+    <div class="bg-slate-100 min-h-screen flex items-center justify-center p-4 sm:p-6 font-sans">
+        <NuxtLink to="/autentikasi/register" class="absolute top-4 left-4 sm:top-6 sm:left-6 z-10">
             <img src="/assets/img/logo/dabe_hijau.png" alt="DABE Logo" class="h-10 sm:h-12 w-auto">
             <!-- Menggunakan logo DABE hijau -->
         </NuxtLink>
 
-        <div class="policy-card relative w-full max-w-2xl bg-white rounded-[2.5rem] shadow-xl p-10 sm:p-14">
-            <h1 class="text-center text-3xl font-bold text-gray-800 mb-10">
+        <div class="policy-card relative w-full max-w-xl lg:max-w-2xl bg-white rounded-2xl sm:rounded-3xl shadow-xl p-6 sm:p-8 md:p-10 lg:p-14">
+            <h1 class="text-center text-2xl sm:text-3xl font-bold text-gray-800 mb-6 sm:mb-8 md:mb-10">
                 Kebijakan Privasi
             </h1>
 
-            <h2 class="text-xl font-semibold text-teal-500 mb-4">
+            <h2 class="text-lg sm:text-xl font-semibold text-teal-600 mb-3 sm:mb-4">
                 Syarat & Ketentuan
             </h2>
 
-            <div class="max-h-[45vh] overflow-y-auto pr-4 custom-scrollbar">
-                <div class="text-gray-600 leading-relaxed space-y-5">
+            <div class="max-h-[50vh] sm:max-h-[45vh] overflow-y-auto pr-2 sm:pr-4 custom-scrollbar">
+                <div class="text-gray-700 text-sm sm:text-base leading-relaxed space-y-4">
                     <p>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
                         labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
@@ -38,10 +38,10 @@
                 </div>
             </div>
 
-            <div class="mt-10">
+            <div class="mt-6 sm:mt-8 md:mt-10 text-center sm:text-left">
                 <NuxtLink to="/autentikasi/register">
                     <button
-                        class="bg-teal-400 hover:bg-teal-500 text-white rounded-full p-3 shadow-md hover:shadow-lg transition-all duration-300">
+                        class="bg-teal-500 hover:bg-teal-600 text-white rounded-full p-2.5 sm:p-3 shadow-md hover:shadow-lg transition-all duration-300">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg"> <!-- Panah ke kiri -->
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
@@ -67,30 +67,32 @@ useHead({
 .policy-card::before,
 .policy-card::after {
     content: '';
-    /* Wajib ada untuk pseudo-elements */
     position: absolute;
-    background-color: #2dd4bf;
-    /* Warna teal-400 */
-    width: 10px;
-    /* Lebar aksen garis */
+    background-color: #14b8a6; /* Warna teal-500 atau sesuaikan */
+    width: 8px; /* Lebar aksen garis untuk layar kecil */
     border-radius: 9999px;
-    /* rounded-full */
-    top: 2rem;
-    /* Jarak dari atas */
-    bottom: 2rem;
-    /* Jarak dari bawah */
+    top: 1.5rem; /* Jarak dari atas untuk layar kecil */
+    bottom: 1.5rem; /* Jarak dari bawah untuk layar kecil */
     z-index: -1;
-    /* Posisikan di belakang kartu utama */
 }
 
 .policy-card::before {
-    left: -20px;
-    /* Posisi garis kiri */
+    left: -15px; /* Posisi garis kiri untuk layar kecil */
 }
 
 .policy-card::after {
-    right: -20px;
-    /* Posisi garis kanan */
+    right: -15px; /* Posisi garis kanan untuk layar kecil */
+}
+
+@media (min-width: 640px) { /* sm breakpoint */
+    .policy-card::before,
+    .policy-card::after {
+        width: 10px;
+        top: 2rem;
+        bottom: 2rem;
+    }
+    .policy-card::before { left: -20px; }
+    .policy-card::after { right: -20px; }
 }
 
 /* Styling untuk custom scrollbar */
@@ -100,18 +102,15 @@ useHead({
 
 .custom-scrollbar::-webkit-scrollbar-track {
     background: #f1f5f9;
-    /* slate-100 */
     border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #5eead4;
-    /* Warna teal yang lebih terang agar kontras */
+    background: #2dd4bf; /* teal-400 */
     border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #2dd4bf;
-    /* teal-400 */
+    background: #14b8a6; /* teal-500 */
 }
 </style>
