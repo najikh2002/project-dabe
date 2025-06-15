@@ -100,7 +100,7 @@ const fetchProduk = async () => {
     // Asumsikan API mengembalikan array produk dalam `data.value.data` atau langsung `data.value`
     const { data, error: fetchError } = await useFetch('/api/produk', { // Sesuaikan endpoint
       baseURL: config.public.apiBase,
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Authorization': `Bearer ${authToken}`
       }

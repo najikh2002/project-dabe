@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiBase: "http://api-dabe.pejuangpemrograman.com",
+      apiBase: "https://api-dabe.pejuangpemrograman.com",
     },
   },
 });
