@@ -6,7 +6,7 @@
 		<!-- Hero Section -->
 		<section class="container mx-auto opacity-0 animate-fadeIn">
 			<div class="p-4">
-				<DynamicCarousel :items="carouselItems" :autoplay="3000"" />
+				<DynamicCarousel :items="carouselItems" :autoplay="3000" />
 			</div>
 
 		</section>

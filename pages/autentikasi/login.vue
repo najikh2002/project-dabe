@@ -84,19 +84,17 @@ const loginUser = async () => {
 
     // Langsung ekstrak token dan role dari respons API
     // Berdasarkan contoh respons: { message: '...', token: '...', role: '...' }
-    const name = res?.name; // Ambil nama pengguna jika tersedia, atau gunakan default
+    const nama = res?.nama; // Ambil nama pengguna jika tersedia, atau gunakan default
     const token = res?.token;
     const userRole = res?.role; // Contoh: 'petani' atau 'pembeli'
 
     if (token && userRole) {
       localStorage.setItem('authToken', token);
-      // Jika Anda memerlukan data pengguna lain di localStorage,
-      // Anda bisa membuat objek minimal di sini.
-      // Untuk saat ini, kita hanya menyimpan peran jika itu yang utama.
-      // Atau, jika backend bisa mengirimkan objek user lengkap, itu lebih baik.
-      localStorage.setItem('userData', JSON.stringify({ role: userRole, name: name }));
+      // Simpan nama dari API sebagai 'username' di localStorage
+      localStorage.setItem('username', nama || 'Pengguna'); 
+      localStorage.setItem('userData', JSON.stringify({ role: userRole, name: nama }));
 
-      console.log('Login berhasil. Token:', token, 'Peran pengguna:', userRole, 'Nama pengguna:', name);
+      console.log('Login berhasil. Token:', token, 'Peran pengguna:', userRole, 'Nama pengguna:', nama);
 
       // Arahkan berdasarkan peran pengguna yang telah diidentifikasi
       if (userRole === 'petani') {
@@ -113,7 +111,20 @@ const loginUser = async () => {
       error.value = errMsg;
     }
   } catch (err) {
-    error.value = err?.data?.message || 'Login gagal. Periksa kembali email dan password.'
+    let errorMessage = 'Login gagal. Periksa kembali email dan password.'; // Pesan default
+    if (err?.data?.message) {
+      if (typeof err.data.message === 'string') {
+        errorMessage = err.data.message;
+      } else if (Array.isArray(err.data.message)) {
+        errorMessage = err.data.message.join('; '); // Gabungkan jika array
+      } else if (typeof err.data.message === 'object' && err.data.message !== null) {
+        // Coba ekstrak dari struktur objek error umum atau stringify
+        errorMessage = err.data.message.detail || err.data.message.error || JSON.stringify(err.data.message);
+      }
+    } else if (err?.message && typeof err.message === 'string') { // Fallback ke err.message
+        errorMessage = err.message;
+    }
+    error.value = errorMessage;
   }
 }
 

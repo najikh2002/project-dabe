@@ -8,6 +8,8 @@ export default defineNuxtConfig({
     "nuxt-charts",
     "vue3-carousel-nuxt",
     "@formkit/auto-animate",
+    "@pinia/nuxt",
+    "pinia-plugin-persistedstate",
   ],
   css: ["~/assets/css/main.css", "leaflet/dist/leaflet.css"],
   vite: {

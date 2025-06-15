@@ -49,8 +49,7 @@
                     <div class="relative">
                         <button @click="userDropdownOpen = !userDropdownOpen"
                             class="flex items-center text-white hover:text-teal-200 focus:outline-none" v-if="isLoggedIn">
-                            <img class="w-10 h-10 rounded-full border-2 border-white object-cover"
-                                src="https://via.placeholder.com/100" alt="User Avatar" />
+                            
                             <span class="ml-2 font-medium">{{ loggedInUsername }}</span>
                             <svg class="w-4 h-4 ml-1 fill-current" viewBox="0 0 20 20">
                                 <path
@@ -166,7 +165,7 @@ export default {
                 this.loggedInUsername = localStorage.getItem('username') || 'Pengguna';
             } else {
                 this.isLoggedIn = false;
-                this.loggedInUsername = 'Pengguna';
+                this.loggedInUsername = 'username'; // Atur default username
             }
         },
         logout() {
@@ -176,7 +175,8 @@ export default {
             this.loggedInUsername = 'Pengguna';
             this.userDropdownOpen = false;
             console.log('User logged out');
-            this.$router.push('/autentikasi/login');
+            // Arahkan ke halaman login
+            this.$router.push('/autentikasi/login'); 
         }
     }
 };
