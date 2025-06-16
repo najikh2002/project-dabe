@@ -12,9 +12,11 @@
 
                 <div class="flex-grow max-w-xl mx-4">
                     <div class="relative">
-                        <input type="search" name="search" placeholder="Cari yang kamu mau"
+                        <input type="search" name="search" placeholder="Cari yang kamu mau" v-model="searchQuery" @keyup.enter="handleSearch"
                             class="w-full h-10 px-4 py-2 text-sm bg-white border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-teal-300 focus:border-transparent placeholder-gray-500 text-gray-900 transition-all duration-300" />
-                        <button type="submit"
+                        <button 
+                            type="button" 
+                            @click="handleSearch"
                             class="absolute inset-y-0 right-0 flex items-center justify-center w-10 h-10 text-white bg-teal-600 hover:bg-teal-700 rounded-r-md focus:outline-none focus:ring-2 focus:ring-teal-400">
                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
@@ -137,7 +139,8 @@ export default {
             mobileMenuOpen: false,
             userDropdownOpen: false,
             isLoggedIn: false,
-            loggedInUsername: 'Pengguna'
+            loggedInUsername: 'Pengguna',
+            searchQuery: '' // Tambahkan state untuk search query
         };
     },
     watch: {
@@ -176,7 +179,15 @@ export default {
             this.userDropdownOpen = false;
             console.log('User logged out');
             // Arahkan ke halaman login
-            this.$router.push('/autentikasi/login'); 
+            this.$router.push('/autentikasi/login');
+        },
+        handleSearch() {
+            if (this.searchQuery.trim() !== '') {
+                // Arahkan ke halaman hasil pencarian dengan query
+                // Misalnya: /cari?q=beras
+                this.$router.push({ path: '/pencarian', query: { q: this.searchQuery.trim() } });
+                // this.searchQuery = ''; // Opsional: Kosongkan input setelah search
+            }
         }
     }
 };

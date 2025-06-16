@@ -38,10 +38,21 @@ const isLoading = ref(false);
 const error = ref('');
 const success = ref('');
 
-async function handleTambah(productData) {
+async function handleTambah(productDataFromForm) {
   isLoading.value = true;
   error.value = '';
   success.value = '';
+
+  // Buat objek FormData jika ada file, atau gunakan objek biasa jika tidak
+  let bodyToSend;
+  if (productDataFromForm.foto_file instanceof File) {
+    bodyToSend = new FormData();
+    for (const key in productDataFromForm) {
+      bodyToSend.append(key, productDataFromForm[key]);
+    }
+  } else {
+    bodyToSend = productDataFromForm;
+  }
 
   try {
     const authToken = localStorage.getItem('authToken');
@@ -56,11 +67,11 @@ async function handleTambah(productData) {
     const response = await $fetch('api/produk', { // Sesuaikan endpoint
       baseURL: config.public.apiBase,
       method: 'POST',
-      body: productData, // Pastikan productData adalah FormData jika ada file, atau JSON jika tidak
+      body: bodyToSend, // Kirim FormData atau objek biasa
       headers: { 
         'Authorization': `Bearer ${authToken}`
-        // Jika productData adalah FormData, browser akan mengatur Content-Type secara otomatis.
-        // Jika productData adalah objek JSON, Anda mungkin perlu menambahkan:
+        // Jika bodyToSend adalah FormData, browser akan mengatur Content-Type: multipart/form-data secara otomatis.
+        // Jika bodyToSend adalah objek JSON, $fetch akan mengatur Content-Type: application/json secara otomatis.
         // 'Content-Type': 'application/json', 
       }
     });
