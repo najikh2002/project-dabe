@@ -139,9 +139,12 @@ const konfirmasi = async () => {
   const pendingId = route.query.pending_id;
 
   try {
-    const res = await axios.post("/api/privacy-confirm", {
-      pending_id: pendingId,
-    });
+    const res = await axios.post(
+      "https://api-dabe.pejuangpemrograman.com/api/privacy-confirm",
+      {
+        pending_id: pendingId,
+      }
+    );
 
     const token = res.data.token;
     localStorage.setItem("token", token);
