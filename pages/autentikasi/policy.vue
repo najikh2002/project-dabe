@@ -141,6 +141,9 @@ const konfirmasi = async () => {
     const response = await $fetch("/api/privacy-confirm", {
       // Sesuaikan endpoint jika berbeda
       baseURL: config.public.apiBase, // Menggunakan baseURL dari runtime config
+      headers: {
+        "Content-Type": "application/json",
+      },
       method: "POST",
       body: {
         pending_id: pendingId,
