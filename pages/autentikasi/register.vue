@@ -94,9 +94,6 @@
               required
               @blur="validateEmail"
             />
-            <p v-if="emailError" class="text-sm text-red-600 mt-1">
-              {{ emailError }}
-            </p>
             <p v-if="emailChecking" class="text-sm text-gray-400 mt-1">
               Memeriksa email...
             </p>
@@ -233,12 +230,13 @@ const validateEmail = async () => {
       emailError.value = "Gagal memeriksa email. Silakan coba lagi.";
     } else if (!data.value.available) {
       emailError.value = "Email sudah terdaftar. Gunakan email lain.";
+    } else {
+      emailAvailable.value = true;
     }
   } catch (err) {
     emailError.value = "Terjadi kesalahan saat memeriksa email.";
   } finally {
     emailChecking.value = false;
-    emailAvailable.value = true;
   }
 };
 
