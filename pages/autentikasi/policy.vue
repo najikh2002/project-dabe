@@ -1,25 +1,61 @@
 <template>
-  <div class="bg-teal-100 min-h-screen flex items-center justify-center p-4 font-sans">
+  <div
+    class="bg-teal-100 min-h-screen flex items-center justify-center p-4 font-sans"
+  >
     <!-- Logo -->
-    <NuxtLink v-if="!isOauth" to="/" class="absolute top-6 left-6 sm:top-8 sm:left-8">
-      <img src="/assets/img/logo/dabe_hijau.png" alt="DABE Logo" class="h-10 sm:h-12 w-auto" />
+    <NuxtLink
+      v-if="!isOauth"
+      to="/"
+      class="absolute top-6 left-6 sm:top-8 sm:left-8"
+    >
+      <img
+        src="/assets/img/logo/dabe_hijau.png"
+        alt="DABE Logo"
+        class="h-10 sm:h-12 w-auto"
+      />
     </NuxtLink>
 
-    <div class="policy-card relative w-full max-w-2xl bg-white rounded-[2.5rem] shadow-xl p-10 sm:p-14">
-      <h1 class="text-center text-3xl font-bold text-gray-800 mb-10">Kebijakan Privasi</h1>
+    <div
+      class="policy-card relative w-full max-w-2xl bg-white rounded-[2.5rem] shadow-xl p-10 sm:p-14"
+    >
+      <h1 class="text-center text-3xl font-bold text-gray-800 mb-10">
+        Kebijakan Privasi
+      </h1>
 
-      <h2 class="text-xl font-semibold text-teal-500 mb-4">Syarat & Ketentuan</h2>
+      <h2 class="text-xl font-semibold text-teal-500 mb-4">
+        Syarat & Ketentuan
+      </h2>
 
-      <div class="max-h-[45vh] overflow-y-auto pr-4 custom-scrollbar" ref="scrollContainer">
+      <div
+        class="max-h-[45vh] overflow-y-auto pr-4 custom-scrollbar"
+        ref="scrollContainer"
+      >
         <div class="text-gray-600 leading-relaxed space-y-5">
           <p>
-            DABE adalah platform terdesentralisasi yang menghubungkan petani beras langsung dengan pembeli tanpa perantara. Dalam menyediakan layanan ini, kami mengumpulkan informasi pribadi seperti nama, nomor telepon, alamat, dan data transaksi untuk memastikan proses pembelian, pengiriman, dan komunikasi berjalan lancar. Data lokasi Anda juga dapat kami gunakan, dengan izin, untuk mencocokkan Anda dengan petani terdekat.
+            DABE adalah platform terdesentralisasi yang menghubungkan petani
+            beras langsung dengan pembeli tanpa perantara. Dalam menyediakan
+            layanan ini, kami mengumpulkan informasi pribadi seperti nama, nomor
+            telepon, alamat, dan data transaksi untuk memastikan proses
+            pembelian, pengiriman, dan komunikasi berjalan lancar. Data lokasi
+            Anda juga dapat kami gunakan, dengan izin, untuk mencocokkan Anda
+            dengan petani terdekat.
           </p>
           <p>
-            Kami menjaga informasi pribadi Anda dengan standar keamanan tinggi dan tidak pernah menjual atau membagikannya kepada pihak yang tidak berkepentingan. Data hanya dibagikan kepada petani dan mitra logistik untuk keperluan pengiriman, serta layanan pihak ketiga terpercaya seperti penyedia pembayaran. Anda memiliki hak penuh atas data Anda, termasuk hak untuk mengakses, mengubah, atau menghapusnya dari sistem kami kapan saja.
+            Kami menjaga informasi pribadi Anda dengan standar keamanan tinggi
+            dan tidak pernah menjual atau membagikannya kepada pihak yang tidak
+            berkepentingan. Data hanya dibagikan kepada petani dan mitra
+            logistik untuk keperluan pengiriman, serta layanan pihak ketiga
+            terpercaya seperti penyedia pembayaran. Anda memiliki hak penuh atas
+            data Anda, termasuk hak untuk mengakses, mengubah, atau menghapusnya
+            dari sistem kami kapan saja.
           </p>
           <p>
-            DABE berkomitmen terhadap transparansi dan perlindungan privasi pengguna. Kami hanya menyimpan data selama diperlukan untuk layanan dan kepatuhan hukum. Jika terdapat pembaruan kebijakan privasi, kami akan memberitahukannya melalui aplikasi. Untuk pertanyaan atau permintaan terkait data pribadi, silakan hubungi kami melalui email resmi: support@dabe.id.
+            DABE berkomitmen terhadap transparansi dan perlindungan privasi
+            pengguna. Kami hanya menyimpan data selama diperlukan untuk layanan
+            dan kepatuhan hukum. Jika terdapat pembaruan kebijakan privasi, kami
+            akan memberitahukannya melalui aplikasi. Untuk pertanyaan atau
+            permintaan terkait data pribadi, silakan hubungi kami melalui email
+            resmi: support@dabe.id.
           </p>
         </div>
       </div>
@@ -28,9 +64,21 @@
       <div class="mt-10 flex justify-between items-center">
         <!-- Tombol Kembali (hanya untuk register manual) -->
         <NuxtLink v-if="!isOauth" to="/autentikasi/register">
-          <button class="bg-teal-400 hover:bg-teal-500 text-white rounded-full p-3 shadow-md hover:shadow-lg transition-all duration-300">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          <button
+            class="bg-teal-400 hover:bg-teal-500 text-white rounded-full p-3 shadow-md hover:shadow-lg transition-all duration-300"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2.5"
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              ></path>
             </svg>
           </button>
         </NuxtLink>
@@ -57,7 +105,8 @@ useHead({
   meta: [
     {
       name: "description",
-      content: "Halaman kebijakan privasi dan syarat ketentuan penggunaan layanan DABE.",
+      content:
+        "Halaman kebijakan privasi dan syarat ketentuan penggunaan layanan DABE.",
     },
   ],
 });
@@ -108,7 +157,10 @@ const konfirmasi = async () => {
       localStorage.setItem("username", userName); // Simpan nama pengguna
       // Anda mungkin juga ingin menyimpan userData jika API mengembalikannya
       if (userRole) {
-        localStorage.setItem("userData", JSON.stringify({ role: userRole, nama: userName }));
+        localStorage.setItem(
+          "userData",
+          JSON.stringify({ role: userRole, nama: userName })
+        );
       }
     }
 

@@ -290,7 +290,7 @@ const registerUser = async () => {
 const registerWithGoogle = () => {
   // Endpoint API backend Anda yang akan memulai alur OAuth Google
   // Gantilah '/api/auth/google/redirect' dengan endpoint Anda yang sebenarnya jika berbeda
-  const googleLoginUrl = `${config.public.apiBase}/api/register/google`;
+  const googleLoginUrl = `${config.public.apiBase}/register/google`;
   // Mengarahkan pengguna ke URL otentikasi Google yang ditangani oleh backend
   window.location.href = googleLoginUrl;
 };
