@@ -115,9 +115,9 @@ onMounted(() => {
     if (storedUserData) {
         try {
             const parsedUserData = JSON.parse(storedUserData);
-            // Asumsikan data pengguna memiliki properti 'name'
-            if (parsedUserData && parsedUserData.name) {
-                user.value.name = parsedUserData.name;
+            // Mengambil nama pengguna dari properti 'nama'
+            if (parsedUserData && parsedUserData.nama) {
+                user.value.name = parsedUserData.nama;
             } else if (parsedUserData && parsedUserData.role) {
                 // Fallback ke role jika nama tidak ada, atau sesuaikan
                 user.value.name = parsedUserData.role.charAt(0).toUpperCase() + parsedUserData.role.slice(1);

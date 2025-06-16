@@ -165,7 +165,7 @@ export default {
                 this.loggedInUsername = localStorage.getItem('username') || 'Pengguna';
             } else {
                 this.isLoggedIn = false;
-                this.loggedInUsername = 'username'; // Atur default username
+                this.loggedInUsername = 'Pengguna'; // Perbaiki typo, konsistenkan default username
             }
         },
         logout() {

@@ -44,27 +44,36 @@ async function handleTambah(productData) {
   success.value = '';
 
   try {
-    // Ganti '/api/produk' dengan endpoint API Anda yang sebenarnya untuk membuat produk
-    const { data, error: fetchError } = await useFetch('api/produk', { // Sesuaikan endpoint
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      error.value = 'Otentikasi gagal. Silakan login kembali.';
+      // Opsional: Arahkan ke halaman login
+      // navigateTo('/autentikasi/login');
+      return;
+    }
+
+    // Menggunakan $fetch karena ini adalah aksi sisi klien setelah komponen terpasang
+    const response = await $fetch('api/produk', { // Sesuaikan endpoint
       baseURL: config.public.apiBase,
       method: 'POST',
       body: productData, // Pastikan productData adalah FormData jika ada file, atau JSON jika tidak
-      // headers: { 'Authorization': `Bearer ${yourAuthToken}` } // Jika API memerlukan otentikasi
+      headers: { 
+        'Authorization': `Bearer ${authToken}`
+        // Jika productData adalah FormData, browser akan mengatur Content-Type secara otomatis.
+        // Jika productData adalah objek JSON, Anda mungkin perlu menambahkan:
+        // 'Content-Type': 'application/json', 
+      }
     });
 
-    if (fetchError.value) {
-      error.value = fetchError.value.data?.message || fetchError.value.message || 'Gagal menambahkan produk.';
-    } else {
-      success.value = 'Produk berhasil ditambahkan!';
-      console.log("Produk baru berhasil ditambahkan:", data.value);
-      // Opsional: Arahkan ke halaman daftar produk atau detail produk
-      // setTimeout(() => {
-      //   navigateTo('/dashboard/produk');
-      // }, 1500); // Beri waktu sejenak untuk user membaca pesan sukses
-    }
+    success.value = response.message || 'Produk berhasil ditambahkan!'; // Asumsikan API mengembalikan pesan sukses
+    console.log("Produk baru berhasil ditambahkan:", response);
+    // Opsional: Arahkan ke halaman daftar produk setelah sukses
+    setTimeout(() => {
+      navigateTo('/dashboard/produk');
+    }, 1500);
   } catch (err) {
     console.error("Error saat menambah produk:", err);
-    error.value = 'Terjadi kesalahan tak terduga saat menambahkan produk.';
+    error.value = err.data?.message || err.message || 'Gagal menambahkan produk. Silakan coba lagi.';
   } finally {
     isLoading.value = false;
   }

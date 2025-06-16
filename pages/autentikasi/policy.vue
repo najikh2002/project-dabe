@@ -39,15 +39,15 @@
             </div>
 
             <div class="mt-6 sm:mt-8 md:mt-10 text-center sm:text-left">
-                <NuxtLink to="/autentikasi/register">
-                    <button
-                        class="bg-teal-500 hover:bg-teal-600 text-white rounded-full p-2.5 sm:p-3 shadow-md hover:shadow-lg transition-all duration-300">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"> <!-- Panah ke kiri -->
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                        </svg>
-                    </button>
+                <NuxtLink 
+                    to="/autentikasi/register"
+                    class="inline-block bg-teal-500 hover:bg-teal-600 text-white rounded-full p-2.5 sm:p-3 shadow-md hover:shadow-lg transition-all duration-300"
+                    aria-label="Kembali ke halaman registrasi">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
                 </NuxtLink>
             </div>
         </div>

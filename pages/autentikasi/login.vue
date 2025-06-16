@@ -84,7 +84,7 @@ const loginUser = async () => {
 
     // Langsung ekstrak token dan role dari respons API
     // Berdasarkan contoh respons: { message: '...', token: '...', role: '...' }
-    const nama = res?.nama; // Ambil nama pengguna jika tersedia, atau gunakan default
+    const nama = res?.name; // Ambil nama pengguna jika tersedia, atau gunakan default
     const token = res?.token;
     const userRole = res?.role; // Contoh: 'petani' atau 'pembeli'
 
@@ -92,7 +92,7 @@ const loginUser = async () => {
       localStorage.setItem('authToken', token);
       // Simpan nama dari API sebagai 'username' di localStorage
       localStorage.setItem('username', nama || 'Pengguna'); 
-      localStorage.setItem('userData', JSON.stringify({ role: userRole, name: nama }));
+      localStorage.setItem('userData', JSON.stringify({ role: userRole, nama: nama }));
 
       console.log('Login berhasil. Token:', token, 'Peran pengguna:', userRole, 'Nama pengguna:', nama);
 

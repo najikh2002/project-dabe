@@ -121,27 +121,57 @@ const fetchFinancialData = async () => {
             throw new Error('Token otentikasi tidak ditemukan. Silakan login kembali.');
         }
 
-        // Ganti '/api/dashboard/keuangan' dengan endpoint API Anda yang sebenarnya
-        const { data: financialData, error: fetchError } = await useFetch('/api/ringkasan', {
+        const headers = { 'Authorization': `Bearer ${authToken}` };
+
+        // Fetch Saldo
+        const saldoResponse = await $fetch('/api/keuangan/saldo', {
             baseURL: config.public.apiBase,
             method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${authToken}`
-            }
+            headers: headers
         });
+        console.log('Saldo Response:', saldoResponse); // Tambahkan ini
+        // Asumsikan API mengembalikan { "data": { "total_saldo": 123 } } atau langsung { "total_saldo": 123 }
+        saldo.value = saldoResponse?.data?.saldo_terakhir ?? saldoResponse?.saldo_terakhir ?? 0;
 
-        if (fetchError.value) {
-            throw new Error(fetchError.value.data?.message || fetchError.value.message || 'Gagal mengambil data keuangan.');
+        // Fetch Total Penjualan
+        const totalPenjualanResponse = await $fetch('/api/keuangan/total', {
+            baseURL: config.public.apiBase,
+            method: 'GET',
+            headers: headers
+        });
+        console.log('Total Penjualan Response:', totalPenjualanResponse); // Tambahkan ini
+        // Asumsikan API mengembalikan { "data": { "total_pendapatan": 123 } } atau langsung { "total_pendapatan": 123 }
+        totalPenjualan.value = totalPenjualanResponse?.data?.total_pendapatan ?? totalPenjualanResponse?.total_pendapatan ?? 0;
+
+        // Fetch Pendapatan Bulanan
+        const pendapatanBulananResponse = await $fetch('/api/keuangan/per-bulan', {
+            baseURL: config.public.apiBase,
+            method: 'GET',
+            headers: headers
+        });
+        console.log('Pendapatan Bulanan Response:', pendapatanBulananResponse); // Tambahkan ini
+        // Mengakses data berdasarkan struktur respons: { tahun: ..., data: [ { bulan: ..., total: ... } ] }
+        if (pendapatanBulananResponse && Array.isArray(pendapatanBulananResponse.data) && pendapatanBulananResponse.data.length > 0) {
+            const monthlyData = pendapatanBulananResponse.data;
+            const totalRevenueForPeriod = monthlyData.reduce((sum, monthData) => {
+                return sum + (parseFloat(monthData.total) || 0);
+            }, 0);
+            const numberOfMonths = monthlyData.length;
+            pendapatanBulanan.value = numberOfMonths > 0 ? totalRevenueForPeriod / numberOfMonths : 0;
+        } else {
+            pendapatanBulanan.value = 0;
         }
 
-        // Menyesuaikan dengan struktur key dari JSON yang diberikan
-        // Misalnya, jika API mengembalikan total_saldo, total_pendapatan, pendapatan_bulanan
-        saldo.value = financialData.value?.total_saldo || 0;
-        totalPenjualan.value = financialData.value?.total_pendapatan || 0;
-        pendapatanBulanan.value = financialData.value?.pendapatan_bulanan || 0;
-
     } catch (err) {
-        error.value = err.message;
+        // Tangani error dari $fetch
+        // err akan memiliki properti seperti data (parsed error body), status, message
+        if (err.data && err.data.message) {
+            error.value = err.data.message;
+        } else if (err.message) {
+            error.value = err.message;
+        } else {
+            error.value = 'Gagal mengambil data keuangan.';
+        }
         console.error("Error mengambil data keuangan:", err);
         // Anda bisa menampilkan pesan error ini di template jika diperlukan
     } finally {
