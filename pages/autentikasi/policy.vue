@@ -99,6 +99,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter, useRuntimeConfig } from "#app"; // Menggunakan useRouter dari Nuxt dan useRuntimeConfig
+import axios from "axios";
 
 useHead({
   title: "Kebijakan Privasi - DABE",
@@ -138,36 +139,14 @@ const konfirmasi = async () => {
   const pendingId = route.query.pending_id;
 
   try {
-    const response = await $fetch("/api/privacy-confirm", {
-      // Sesuaikan endpoint jika berbeda
-      baseURL: config.public.apiBase, // Menggunakan baseURL dari runtime config
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: {
-        pending_id: pendingId,
-      },
+    const res = await axios.post("/api/privacy-confirm", {
+      pending_id: pendingId,
     });
 
-    // Asumsikan respons API memiliki struktur seperti: { token: '...', user: { name: '...', role: '...' } }
-    const token = response?.token;
-    const userName = response?.user?.name || "Pengguna"; // Ambil nama pengguna
-    const userRole = response?.user?.role; // Ambil peran pengguna
+    const token = res.data.token;
+    localStorage.setItem("token", token);
 
-    if (token) {
-      localStorage.setItem("authToken", token); // Simpan token dengan kunci 'authToken'
-      localStorage.setItem("username", userName); // Simpan nama pengguna
-      // Anda mungkin juga ingin menyimpan userData jika API mengembalikannya
-      if (userRole) {
-        localStorage.setItem(
-          "userData",
-          JSON.stringify({ role: userRole, nama: userName })
-        );
-      }
-    }
-
-    router.push("/"); // Arahkan ke halaman utama setelah konfirmas;
+    router.push("/");
   } catch (err) {
     console.error(err);
     alert("Gagal menyetujui kebijakan. Coba lagi nanti.");
