@@ -32,30 +32,28 @@
       >
         <div class="text-gray-600 leading-relaxed space-y-5">
           <p>
-            DABE adalah platform terdesentralisasi yang menghubungkan petani
-            beras langsung dengan pembeli tanpa perantara. Dalam menyediakan
-            layanan ini, kami mengumpulkan informasi pribadi seperti nama, nomor
-            telepon, alamat, dan data transaksi untuk memastikan proses
-            pembelian, pengiriman, dan komunikasi berjalan lancar. Data lokasi
-            Anda juga dapat kami gunakan, dengan izin, untuk mencocokkan Anda
-            dengan petani terdekat.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat. Duis aute irure dolor in
+            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+            culpa qui officia deserunt mollit anim id est laborum.
           </p>
           <p>
-            Kami menjaga informasi pribadi Anda dengan standar keamanan tinggi
-            dan tidak pernah menjual atau membagikannya kepada pihak yang tidak
-            berkepentingan. Data hanya dibagikan kepada petani dan mitra
-            logistik untuk keperluan pengiriman, serta layanan pihak ketiga
-            terpercaya seperti penyedia pembayaran. Anda memiliki hak penuh atas
-            data Anda, termasuk hak untuk mengakses, mengubah, atau menghapusnya
-            dari sistem kami kapan saja.
+            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+            accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
+            quae ab illo inventore veritatis et quasi architecto beatae vitae
+            dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
+            aspernatur aut odit aut fugit, sed quia consequuntur magni dolores
+            eos qui ratione voluptatem sequi nesciunt.
           </p>
           <p>
-            DABE berkomitmen terhadap transparansi dan perlindungan privasi
-            pengguna. Kami hanya menyimpan data selama diperlukan untuk layanan
-            dan kepatuhan hukum. Jika terdapat pembaruan kebijakan privasi, kami
-            akan memberitahukannya melalui aplikasi. Untuk pertanyaan atau
-            permintaan terkait data pribadi, silakan hubungi kami melalui email
-            resmi: support@dabe.id.
+            Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet,
+            consectetur, adipisci velit, sed quia non numquam eius modi tempora
+            incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut
+            enim ad minima veniam, quis nostrum exercitationem ullam corporis
+            suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?
           </p>
         </div>
       </div>
@@ -98,7 +96,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRoute, useRouter, useRuntimeConfig } from "#app"; // Menggunakan useRouter dari Nuxt dan useRuntimeConfig
+import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 
 useHead({
@@ -112,7 +110,6 @@ useHead({
   ],
 });
 
-const config = useRuntimeConfig(); // Untuk mengakses baseURL API
 const route = useRoute();
 const router = useRouter();
 const scrollContainer = ref(null);
@@ -139,12 +136,9 @@ const konfirmasi = async () => {
   const pendingId = route.query.pending_id;
 
   try {
-    const res = await axios.post(
-      "https://api-dabe.pejuangpemrograman.com/api/privacy-confirm",
-      {
-        pending_id: pendingId,
-      }
-    );
+    const res = await axios.post("http://127.0.0.1:8000/api/privacy-confirm", {
+      pending_id: pendingId,
+    });
 
     const token = res.data.token;
     localStorage.setItem("token", token);
