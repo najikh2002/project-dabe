@@ -62,7 +62,7 @@
               type="email"
               name="email"
               id="email"
-              v-model="user?.email"
+              v-model="userEmail"
               class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 bg-gray-100 cursor-not-allowed sm:text-sm transition duration-150"
               disabled
               readonly
@@ -87,10 +87,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useHead, useCookie } from "#imports";
-import auth from "~/middleware/auth";
 
 definePageMeta({
-  middleware: auth,
+  middleware: "auth",
 });
 
 interface User {
@@ -135,6 +134,7 @@ const userProfile = ref<PembeliProfile>({
 const previewImage = ref<string | null>(null);
 const fotoFile = ref<File | null>(null);
 const fileInput = ref<HTMLInputElement | null>(null);
+const userEmail = computed(() => user.value?.email ?? "");
 
 // Token
 const token = useCookie("token");
