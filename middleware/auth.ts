@@ -1,6 +1,8 @@
-export default defineNuxtRouteMiddleware((to, from) => {
-  const token = localStorage.getItem("authToken");
-  if (!token) {
-    return navigateTo("/autentikasi/login");
+export default defineNuxtRouteMiddleware(() => {
+  if (import.meta.client) {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      return navigateTo("/autentikasi/login");
+    }
   }
 });
