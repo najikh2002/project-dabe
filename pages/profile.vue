@@ -44,7 +44,7 @@
               type="text"
               name="username"
               id="username"
-              v-model="userProfile.username"
+              v-model="user?.name"
               class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 sm:text-sm transition duration-150"
               placeholder="Masukkan nama pengguna"
               required
@@ -94,16 +94,13 @@ definePageMeta({
 
 interface User {
   id_user: number;
+  name: string;
   email: string;
   role: string;
 }
 
 interface ApiProfileResponse {
-  user: {
-    id_user: number;
-    email: string;
-    role: string;
-  };
+  user: User;
   profile: PembeliProfile;
 }
 
@@ -142,12 +139,15 @@ const token = useCookie("token");
 // Ambil data profile saat mount
 onMounted(async () => {
   try {
-    const res = await $fetch<ApiProfileResponse>("/api/profile", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token.value}`,
-      },
-    });
+    const res = await $fetch<ApiProfileResponse>(
+      "https://api-dabe.pejuangpemrograman.com/api/profile",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      }
+    );
 
     if (res.user && res.profile) {
       user.value = res.user;
@@ -183,13 +183,16 @@ async function handleSubmit() {
       formData.append("alamat", userProfile.value.alamat);
     if (fotoFile.value) formData.append("foto", fotoFile.value);
 
-    const res = await $fetch<UpdateProfileResponse>("/api/profile", {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token.value}`,
-      },
-      body: formData,
-    });
+    const res = await $fetch<UpdateProfileResponse>(
+      "https://api-dabe.pejuangpemrograman.com/api/profile",
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+        body: formData,
+      }
+    );
 
     alert("Profil berhasil diperbarui");
     userProfile.value = res.data;
