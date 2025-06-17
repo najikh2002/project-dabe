@@ -165,7 +165,6 @@ const loginUser = async () => {
 
     if (token && userRole) {
       localStorage.setItem("authToken", token);
-      // Simpan nama dari API sebagai 'username' di localStorage
       localStorage.setItem("username", nama || "Pengguna");
       localStorage.setItem(
         "userData",
