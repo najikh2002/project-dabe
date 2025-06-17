@@ -78,10 +78,37 @@
             <button
               type="submit"
               :disabled="isLoading"
-              class="py-2 sm:py-2.5 w-full font-bold rounded-md bg-[#22AB97] text-white hover:bg-[#1b9786] transition-colors text-sm sm:text-base disabled:opacity-70"
+              class="py-2 sm:py-2.5 w-full font-bold rounded-md bg-[#22AB97] text-white hover:bg-[#1b9786] transition-colors text-sm sm:text-base disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
             >
-              Masuk
+              <span v-if="isLoading">
+                <svg
+                  class="animate-spin mr-2 h-5 w-5 text-white"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                    fill="none"
+                  />
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4l5-5-5-5v4a12 12 0 00-12 12h4z"
+                  />
+                </svg>
+              </span>
+              <span v-else>Masuk</span>
             </button>
+            <p
+              v-if="error"
+              class="text-xs sm:text-sm text-red-500 text-center mt-1 sm:mt-2"
+            >
+              {{ error }}
+            </p>
 
             <p class="text-sm text-center">
               Belum punya akun DABE?
@@ -91,28 +118,32 @@
             </p>
           </div>
         </form>
-
-        <p
-          v-if="error"
-          class="text-xs sm:text-sm text-red-500 text-center mt-1 sm:mt-2"
-        >
-          {{ error }}
-        </p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { navigateTo, useRuntimeConfig } from "#app"; // Pastikan navigateTo diimpor
+import { ref, onMounted } from "vue";
+import { navigateTo, useRuntimeConfig } from "#app";
+import { useRoute } from "vue-router"; // ✅ Ini yang kamu lupa
+
+const route = useRoute(); // ✅ Deklarasi route
 
 const email = ref("");
 const password = ref("");
 const error = ref("");
 const isLoading = ref(false); // Tambahkan state isLoading
 const config = useRuntimeConfig();
+
+onMounted(() => {
+  if (route.query.error) {
+    error.value = route.query.error;
+  }
+});
+
 const loginUser = async () => {
+  isLoading.value = true;
   try {
     error.value = "";
 
@@ -193,12 +224,13 @@ const loginUser = async () => {
       errorMessage = err.message;
     }
     error.value = errorMessage;
+  } finally {
+    isLoading.value = false;
   }
 };
 
 const loginWithGoogle = () => {
-  // Endpoint API backend Anda yang akan memulai alur OAuth Google
-  const googleLoginUrl = `${config.public.apiBase}/login/google`; // Sesuaikan jika endpoint berbeda
+  const googleLoginUrl = `${config.public.apiBase}/login/google`;
   window.location.href = googleLoginUrl;
 };
 </script>

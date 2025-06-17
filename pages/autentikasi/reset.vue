@@ -1,15 +1,31 @@
 <template>
-  <section class="w-full min-h-screen flex flex-col justify-center items-center bg-gray-50 font-[Poppins] p-4">
+  <section
+    class="w-full min-h-screen flex flex-col justify-center items-center bg-gray-50 font-[Poppins] p-4"
+  >
     <NuxtLink to="/" class="absolute top-4 left-4 sm:top-6 sm:left-6 z-20">
-      <img src="/assets/img/logo/dabe_hijau.png" alt="DABE Logo" class="h-10 sm:h-12 w-auto" />
+      <img
+        src="/assets/img/logo/dabe_hijau.png"
+        alt="DABE Logo"
+        class="h-10 sm:h-12 w-auto"
+      />
     </NuxtLink>
 
-    <div class="bg-white p-6 sm:p-8 md:p-10 rounded-xl shadow-xl w-full max-w-md">
-      <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Reset Kata Sandi Anda</h1>
+    <div
+      class="bg-white p-6 sm:p-8 md:p-10 rounded-xl shadow-xl w-full max-w-md"
+    >
+      <h1
+        class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center"
+      >
+        Reset Kata Sandi Anda
+      </h1>
 
       <form @submit.prevent="submitNewPassword" class="space-y-5">
         <div>
-          <label for="password" class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Kata Sandi Baru</label>
+          <label
+            for="password"
+            class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
+            >Kata Sandi Baru</label
+          >
           <input
             v-model="password"
             type="password"
@@ -20,7 +36,11 @@
           />
         </div>
         <div>
-          <label for="password_confirmation" class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">Konfirmasi Kata Sandi Baru</label>
+          <label
+            for="password_confirmation"
+            class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
+            >Konfirmasi Kata Sandi Baru</label
+          >
           <input
             v-model="password_confirmation"
             type="password"
@@ -33,16 +53,47 @@
         <button
           type="submit"
           :disabled="isLoading"
-          class="w-full py-2.5 sm:py-3 bg-teal-500 text-white text-sm sm:text-base font-bold rounded-md shadow-md hover:bg-teal-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          class="w-full py-2.5 sm:py-3 bg-teal-500 text-white text-sm sm:text-base font-bold rounded-md shadow-md hover:bg-teal-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
         >
-          {{ isLoading ? "Menyimpan..." : "Simpan Kata Sandi Baru" }}
+          <span v-if="isLoading">
+            <svg
+              class="animate-spin mr-2 h-5 w-5 text-white"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+                fill="none"
+              />
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4l5-5-5-5v4a12 12 0 00-12 12h4z"
+              />
+            </svg>
+          </span>
+          <span v-else>Simpan Kata Sandi Baru</span>
         </button>
       </form>
 
-      <p v-if="message" :class="messageType === 'success' ? 'text-green-600' : 'text-red-600'" class="mt-4 text-sm text-center">{{ message }}</p>
+      <p
+        v-if="message"
+        :class="messageType === 'success' ? 'text-green-600' : 'text-red-600'"
+        class="mt-4 text-sm text-center"
+      >
+        {{ message }}
+      </p>
 
       <p v-if="messageType === 'success'" class="mt-6 text-center">
-        <NuxtLink to="/autentikasi/login" class="text-teal-600 hover:text-teal-700 font-semibold">Masuk dengan kata sandi baru</NuxtLink>
+        <NuxtLink
+          to="/autentikasi/login"
+          class="text-teal-600 hover:text-teal-700 font-semibold"
+          >Masuk dengan kata sandi baru</NuxtLink
+        >
       </p>
     </div>
   </section>
@@ -59,7 +110,8 @@ const password_confirmation = ref("");
 const message = ref("");
 const messageType = ref(""); // 'success' or 'error'
 const isLoading = ref(false);
-const token = route.params.token;
+const token = route.query.token;
+const email = route.query.email;
 
 const submitNewPassword = async () => {
   if (password.value !== password_confirmation.value) {
@@ -70,11 +122,11 @@ const submitNewPassword = async () => {
   isLoading.value = true;
   message.value = "";
   try {
-    const { error: fetchError } = await useFetch("/api/user/reset-password", {
-      // Sesuaikan endpoint
+    const { error: fetchError } = await useFetch("/api/password/reset", {
       baseURL: config.public.apiBase,
       method: "POST",
       body: {
+        email: email,
         token: token,
         password: password.value,
         password_confirmation: password_confirmation.value,
@@ -82,7 +134,9 @@ const submitNewPassword = async () => {
     });
 
     if (fetchError.value) {
-      message.value = fetchError.value.data?.message || "Gagal mereset kata sandi. Token mungkin tidak valid atau kedaluwarsa.";
+      message.value =
+        fetchError.value.data?.message ||
+        "Gagal mereset kata sandi. Token mungkin tidak valid atau kedaluwarsa.";
       messageType.value = "error";
     } else {
       message.value = "Kata sandi Anda berhasil direset!";
@@ -101,6 +155,11 @@ const submitNewPassword = async () => {
 
 useHead({
   title: "Reset Kata Sandi - DABE",
-  meta: [{ name: "description", content: "Masukkan kata sandi baru untuk akun DABE Anda." }],
+  meta: [
+    {
+      name: "description",
+      content: "Masukkan kata sandi baru untuk akun DABE Anda.",
+    },
+  ],
 });
 </script>

@@ -145,12 +145,14 @@ const konfirmasi = async () => {
       }
     );
 
-    const token = res.data.token;
-    localStorage.setItem("token", token);
+    const { token, name, role } = res.data;
 
-    router.push("/");
+    // Lalu redirect manual dari FE
+    router.push({
+      path: "/autentikasi/oauth-callback",
+      query: { token, name, role },
+    });
   } catch (err) {
-    console.error(err);
     alert("Gagal menyetujui kebijakan. Coba lagi nanti.");
   }
 };
