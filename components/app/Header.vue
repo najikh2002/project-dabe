@@ -118,7 +118,7 @@
                 class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-20 py-1"
               >
                 <NuxtLink
-                  to="/profil"
+                  to="/profile"
                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-100 hover:text-teal-700"
                 >
                   Profil Saya</NuxtLink
@@ -223,7 +223,7 @@
           </NuxtLink>
           <NuxtLink
             v-if="isLoggedIn"
-            to="/profil"
+            to="/profile"
             class="flex items-center px-4 py-3 text-white hover:bg-teal-600 transition-colors duration-150"
           >
             <img
