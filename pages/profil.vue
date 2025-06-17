@@ -17,17 +17,22 @@
           </div>
           <div class="mt-4 sm:mt-0 sm:ml-6 flex-shrink-0">
             <img
-              class="h-24 w-24 sm:h-28 sm:w-28 rounded-full object-cover shadow-md border-4 border-white"
-              :src="
-                userProfile.avatarUrl ||
-                'https://placehold.co/150x150/EBF4FF/3B82F6?text=Profil'
-              "
+              class="h-24 w-24 sm:h-28 sm:w-28 rounded-full object-cover shadow-md border-4 border-white cursor-pointer"
+              :src="previewImage || userProfile.foto || defaultAvatar"
               alt="Avatar Pengguna"
+              @click="triggerFileInput"
+            />
+            <input
+              type="file"
+              ref="fileInput"
+              class="hidden"
+              accept="image/png, image/jpeg"
+              @change="handleImageChange"
             />
           </div>
         </div>
 
-        <form @submit.prevent="" class="space-y-6">
+        <form @submit.prevent="handleSubmit" class="space-y-6">
           <div>
             <label
               for="username"
@@ -42,6 +47,7 @@
               v-model="userProfile.username"
               class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 sm:text-sm transition duration-150"
               placeholder="Masukkan nama pengguna"
+              required
             />
           </div>
 
@@ -57,8 +63,8 @@
               name="email"
               id="email"
               v-model="userProfile.email"
-              class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 sm:text-sm transition duration-150"
-              placeholder="Masukkan alamat email"
+              class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 bg-gray-100 cursor-not-allowed sm:text-sm transition duration-150"
+              disabled
             />
           </div>
 
@@ -85,12 +91,57 @@ definePageMeta({
   middleware: auth,
 });
 
-// Data dummy untuk profil pengguna
-const userProfile = ref({
+interface UserProfile {
+  username: string;
+  email: string;
+  foto?: string | null;
+}
+
+// Default avatar url placeholder
+const defaultAvatar = "https://placehold.co/150x150/EBF4FF/3B82F6?text=Profil";
+
+const userProfile = ref<UserProfile>({
   username: "Dabeyy",
   email: "context@dabe.com",
-  avatarUrl: "https://placehold.co/150x150/FEF3C7/F97316?text=DB", // Contoh avatar dari placeholder
+  foto: null,
 });
+
+const previewImage = ref<string | null>(null);
+const fileInput = ref<HTMLInputElement | null>(null);
+
+function triggerFileInput() {
+  fileInput.value?.click();
+}
+
+function handleImageChange(event: Event) {
+  const target = event.target as HTMLInputElement;
+  if (!target.files || target.files.length === 0) return;
+
+  const file = target.files[0];
+  // Optional: Validasi tipe file di sini
+
+  // Preview gambar
+  previewImage.value = URL.createObjectURL(file);
+
+  // Kalau mau simpan file untuk upload, bisa simpan ke reactive variable atau formdata saat submit
+  // Contoh: userProfile.value.foto = file; // tapi tipe harus disesuaikan
+}
+
+async function handleSubmit() {
+  try {
+    // TODO: Ganti dengan API call update profil
+    console.log("Submitting profile:", {
+      username: userProfile.value.username,
+      email: userProfile.value.email, // walaupun disabled, tetap bisa dikirim kalau mau
+      foto: previewImage.value,
+    });
+
+    alert("Profil berhasil disimpan!");
+  } catch (error) {
+    alert("Gagal menyimpan profil");
+    console.error(error);
+  }
+}
 
 // Set judul halaman
 useHead({
@@ -102,10 +153,8 @@ useHead({
 </script>
 
 <style scoped>
-/* Jika Anda menggunakan font kustom seperti Inter, pastikan sudah di-setup
-di tailwind.config.js atau di-import secara global.
-.font-sans {
-font-family: 'Inter', sans-serif;
+/* Jika kamu ingin cursor pointer di avatar supaya user tahu bisa klik */
+.cursor-pointer {
+  cursor: pointer;
 }
-*/
 </style>
