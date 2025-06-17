@@ -62,9 +62,10 @@
               type="email"
               name="email"
               id="email"
-              v-model="userProfile.email"
+              v-model="user?.email"
               class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 bg-gray-100 cursor-not-allowed sm:text-sm transition duration-150"
               disabled
+              readonly
             />
           </div>
 
@@ -84,30 +85,78 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useHead, useCookie } from "#imports";
 import auth from "~/middleware/auth";
 
 definePageMeta({
   middleware: auth,
 });
 
-interface UserProfile {
-  username: string;
+interface User {
+  id_user: number;
   email: string;
-  foto?: string | null;
+  role: string;
 }
 
-// Default avatar url placeholder
+interface ApiProfileResponse {
+  user: {
+    id_user: number;
+    email: string;
+    role: string;
+  };
+  profile: PembeliProfile;
+}
+
+interface PembeliProfile {
+  username: string;
+  foto?: string | null;
+  tgl_lahir?: string | null;
+  no_hp?: string | null;
+  alamat?: string | null;
+}
+
+interface UpdateProfileResponse {
+  message: string;
+  data: PembeliProfile;
+}
+
 const defaultAvatar = "https://placehold.co/150x150/EBF4FF/3B82F6?text=Profil";
 
-const userProfile = ref<UserProfile>({
-  username: "Dabeyy",
-  email: "context@dabe.com",
+// State
+const user = ref<User | null>(null);
+const userProfile = ref<PembeliProfile>({
+  username: "",
   foto: null,
+  tgl_lahir: "",
+  no_hp: "",
+  alamat: "",
 });
-
 const previewImage = ref<string | null>(null);
+const fotoFile = ref<File | null>(null);
 const fileInput = ref<HTMLInputElement | null>(null);
+
+// Token
+const token = useCookie("token");
+
+// Ambil data profile saat mount
+onMounted(async () => {
+  try {
+    const res = await $fetch<ApiProfileResponse>("/api/profile", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+    });
+
+    if (res.user && res.profile) {
+      user.value = res.user;
+      userProfile.value = res.profile;
+    }
+  } catch (error) {
+    console.error("Gagal mengambil profil:", error);
+  }
+});
 
 function triggerFileInput() {
   fileInput.value?.click();
@@ -118,36 +167,43 @@ function handleImageChange(event: Event) {
   if (!target.files || target.files.length === 0) return;
 
   const file = target.files[0];
-  // Optional: Validasi tipe file di sini
-
-  // Preview gambar
+  fotoFile.value = file;
   previewImage.value = URL.createObjectURL(file);
-
-  // Kalau mau simpan file untuk upload, bisa simpan ke reactive variable atau formdata saat submit
-  // Contoh: userProfile.value.foto = file; // tapi tipe harus disesuaikan
 }
 
 async function handleSubmit() {
   try {
-    // TODO: Ganti dengan API call update profil
-    console.log("Submitting profile:", {
-      username: userProfile.value.username,
-      email: userProfile.value.email, // walaupun disabled, tetap bisa dikirim kalau mau
-      foto: previewImage.value,
+    const formData = new FormData();
+    formData.append("username", userProfile.value.username);
+    if (userProfile.value.tgl_lahir)
+      formData.append("tgl_lahir", userProfile.value.tgl_lahir);
+    if (userProfile.value.no_hp)
+      formData.append("no_hp", userProfile.value.no_hp);
+    if (userProfile.value.alamat)
+      formData.append("alamat", userProfile.value.alamat);
+    if (fotoFile.value) formData.append("foto", fotoFile.value);
+
+    const res = await $fetch<UpdateProfileResponse>("/api/profile", {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+      body: formData,
     });
 
-    alert("Profil berhasil disimpan!");
-  } catch (error) {
+    alert("Profil berhasil diperbarui");
+    userProfile.value = res.data;
+    previewImage.value = null;
+  } catch (error: any) {
     alert("Gagal menyimpan profil");
-    console.error(error);
+    console.error(error?.data || error);
   }
 }
 
-// Set judul halaman
 useHead({
-  title: "Profil Saya - DABE",
+  title: "Profil Pembeli - DABE",
   meta: [
-    { name: "description", content: "Kelola informasi profil akun DABE Anda." },
+    { name: "description", content: "Kelola informasi profil pembeli Anda." },
   ],
 });
 </script>
