@@ -44,7 +44,7 @@
               type="text"
               name="username"
               id="username"
-              v-model="user?.name"
+              v-model="user.name"
               class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 sm:text-sm transition duration-150"
               placeholder="Masukkan nama pengguna"
               required
@@ -62,7 +62,7 @@
               type="email"
               name="email"
               id="email"
-              v-model="userEmail"
+              v-model="user.email"
               class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 bg-gray-100 cursor-not-allowed sm:text-sm transition duration-150"
               disabled
               readonly
@@ -120,7 +120,15 @@ interface UpdateProfileResponse {
 const defaultAvatar = "https://placehold.co/150x150/EBF4FF/3B82F6?text=Profil";
 
 // State
-const user = ref<User | null>(null);
+function createEmptyUser(): User {
+  return {
+    id_user: 0,
+    name: "",
+    email: "",
+    role: "",
+  };
+}
+const user = ref<User>(createEmptyUser());
 const userProfile = ref<PembeliProfile>({
   username: "",
   foto: null,
@@ -131,7 +139,6 @@ const userProfile = ref<PembeliProfile>({
 const previewImage = ref<string | null>(null);
 const fotoFile = ref<File | null>(null);
 const fileInput = ref<HTMLInputElement | null>(null);
-const userEmail = computed(() => user.value?.email ?? "");
 
 // Token
 const token = useCookie("token");
@@ -150,6 +157,7 @@ onMounted(async () => {
     );
 
     if (res.user && res.profile) {
+      console.log(res);
       user.value = res.user;
       userProfile.value = res.profile;
     }
