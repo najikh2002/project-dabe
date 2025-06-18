@@ -202,7 +202,7 @@ async function handleSubmit() {
           Authorization: `Bearer ${token.value}`,
         },
         body: {
-          name: user.value.name,
+          name: userProfile.value.username,
         },
       }
     );
