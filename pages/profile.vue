@@ -18,7 +18,7 @@
           <div class="mt-4 sm:mt-0 sm:ml-6 flex-shrink-0">
             <img
               class="h-24 w-24 sm:h-28 sm:w-28 rounded-full object-cover shadow-md border-4 border-white cursor-pointer"
-              :src="previewImage || userProfile.foto || defaultAvatar"
+              :src="user.foto"
               alt="Avatar Pengguna"
               @click="triggerFileInput"
             />
@@ -44,7 +44,7 @@
               type="text"
               name="username"
               id="username"
-              v-model="userProfile.username"
+              v-model="user.name"
               class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 sm:text-sm transition duration-150"
               placeholder="Masukkan nama pengguna"
               required
@@ -94,6 +94,7 @@ definePageMeta({
 
 interface User {
   id_user: number;
+  foto: string;
   name: string;
   email: string;
   role: string;
@@ -118,12 +119,13 @@ interface UpdateProfileResponse {
 }
 
 // Default
-const defaultAvatar = "https://placehold.co/150x150/EBF4FF/3B82F6?text=Profil";
+// const defaultAvatar = "https://placehold.co/150x150/EBF4FF/3B82F6?text=Profil";
 
 // State
 function createEmptyUser(): User {
   return {
     id_user: 0,
+    foto: "",
     name: "",
     email: "",
     role: "",
