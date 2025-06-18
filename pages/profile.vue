@@ -141,10 +141,12 @@ const fotoFile = ref<File | null>(null);
 const fileInput = ref<HTMLInputElement | null>(null);
 
 // Token
-const token = useCookie("token");
+const token = ref<string | null>(null);
 
 // Ambil data profile saat mount
 onMounted(async () => {
+  token.value = localStorage.getItem("authToken");
+
   try {
     const res = await $fetch<ApiProfileResponse>(
       "https://api-dabe.pejuangpemrograman.com/api/profile",
