@@ -44,7 +44,7 @@
               type="text"
               name="username"
               id="username"
-              v-model="user.name"
+              v-model="userProfile.username"
               class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 sm:text-sm transition duration-150"
               placeholder="Masukkan nama pengguna"
               required
@@ -86,7 +86,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { useHead, useCookie } from "#imports";
+import { useHead } from "#imports";
 
 definePageMeta({
   middleware: "auth",
@@ -99,11 +99,6 @@ interface User {
   role: string;
 }
 
-interface ApiProfileResponse {
-  user: User;
-  profile: PembeliProfile | null;
-}
-
 interface PembeliProfile {
   username: string;
   foto?: string | null;
@@ -112,11 +107,17 @@ interface PembeliProfile {
   alamat?: string | null;
 }
 
+interface ApiProfileResponse {
+  user: User;
+  profile: PembeliProfile | null;
+}
+
 interface UpdateProfileResponse {
   message: string;
   data: PembeliProfile;
 }
 
+// Default
 const defaultAvatar = "https://placehold.co/150x150/EBF4FF/3B82F6?text=Profil";
 
 // State
@@ -128,6 +129,7 @@ function createEmptyUser(): User {
     role: "",
   };
 }
+
 const user = ref<User>(createEmptyUser());
 const userProfile = ref<PembeliProfile>({
   username: "",
@@ -139,11 +141,9 @@ const userProfile = ref<PembeliProfile>({
 const previewImage = ref<string | null>(null);
 const fotoFile = ref<File | null>(null);
 const fileInput = ref<HTMLInputElement | null>(null);
-
-// Token
 const token = ref<string | null>(null);
 
-// Ambil data profile saat mount
+// Ambil data dari API
 onMounted(async () => {
   token.value = localStorage.getItem("authToken");
 
@@ -158,12 +158,21 @@ onMounted(async () => {
       }
     );
 
-    if (res.user && res.profile) {
-      console.log(res);
-      if (res.user && res.profile) {
-        Object.assign(user.value, res.user); // ✅ BUKAN user.value = ...
-        Object.assign(userProfile.value, res.profile);
-      }
+    if (res.user) {
+      Object.assign(user.value, res.user);
+    }
+
+    if (res.profile) {
+      Object.assign(userProfile.value, res.profile);
+    } else {
+      // isi awal dari user
+      userProfile.value = {
+        username: res.user.name,
+        foto: null,
+        tgl_lahir: "",
+        no_hp: "",
+        alamat: "",
+      };
     }
   } catch (error) {
     console.error("Gagal mengambil profil:", error);
@@ -224,7 +233,6 @@ useHead({
 </script>
 
 <style scoped>
-/* Jika kamu ingin cursor pointer di avatar supaya user tahu bisa klik */
 .cursor-pointer {
   cursor: pointer;
 }
