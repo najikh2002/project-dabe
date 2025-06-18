@@ -62,7 +62,6 @@
               type="email"
               name="email"
               id="email"
-              v-model="user.email"
               :value="user.email"
               class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 bg-gray-100 cursor-not-allowed sm:text-sm transition duration-150"
               disabled
