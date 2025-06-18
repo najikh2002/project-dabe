@@ -32,7 +32,7 @@
           </div>
         </div>
 
-        <form @submit.prevent="handleSubmit" class="space-y-6">
+        <form v-if="user.name" @submit.prevent="handleSubmit" class="space-y-6">
           <div>
             <label
               for="username"
@@ -160,8 +160,10 @@ onMounted(async () => {
 
     if (res.user && res.profile) {
       console.log(res);
-      user.value = res.user;
-      userProfile.value = res.profile;
+      if (res.user && res.profile) {
+        Object.assign(user.value, res.user); // ✅ BUKAN user.value = ...
+        Object.assign(userProfile.value, res.profile);
+      }
     }
   } catch (error) {
     console.error("Gagal mengambil profil:", error);
