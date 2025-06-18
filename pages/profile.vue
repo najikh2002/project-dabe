@@ -114,7 +114,7 @@ interface ApiProfileResponse {
 
 interface UpdateProfileResponse {
   message: string;
-  data: PembeliProfile;
+  data: User;
 }
 
 // Default
@@ -194,16 +194,6 @@ function handleImageChange(event: Event) {
 
 async function handleSubmit() {
   try {
-    const formData = new FormData();
-    formData.append("username", userProfile.value.username);
-    if (userProfile.value.tgl_lahir)
-      formData.append("tgl_lahir", userProfile.value.tgl_lahir);
-    if (userProfile.value.no_hp)
-      formData.append("no_hp", userProfile.value.no_hp);
-    if (userProfile.value.alamat)
-      formData.append("alamat", userProfile.value.alamat);
-    if (fotoFile.value) formData.append("foto", fotoFile.value);
-
     const res = await $fetch<UpdateProfileResponse>(
       "https://api-dabe.pejuangpemrograman.com/api/profile",
       {
@@ -211,15 +201,16 @@ async function handleSubmit() {
         headers: {
           Authorization: `Bearer ${token.value}`,
         },
-        body: formData,
+        body: {
+          name: user.value.name,
+        },
       }
     );
 
-    alert("Profil berhasil diperbarui");
-    userProfile.value = res.data;
-    previewImage.value = null;
+    alert("Nama berhasil diperbarui");
+    user.value = res.data;
   } catch (error: any) {
-    alert("Gagal menyimpan profil");
+    alert("Gagal memperbarui profil");
     console.error(error?.data || error);
   }
 }
