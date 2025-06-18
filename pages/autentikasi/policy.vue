@@ -145,12 +145,12 @@ const konfirmasi = async () => {
       }
     );
 
-    const { token, name, role } = res.data;
+    const { token, name, role, foto } = res.data;
 
     // Lalu redirect manual dari FE
     router.push({
       path: "/autentikasi/oauth-callback",
-      query: { token, name, role },
+      query: { token, name, role, foto },
     });
   } catch (err) {
     alert("Gagal menyetujui kebijakan. Coba lagi nanti.");

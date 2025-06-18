@@ -104,12 +104,19 @@
               class="flex items-center text-white hover:text-teal-200 focus:outline-none"
               v-if="isLoggedIn"
             >
-              <span class="ml-2 font-medium">{{ loggedInUsername }}</span>
-              <svg class="w-4 h-4 ml-1 fill-current" viewBox="0 0 20 20">
+              <img
+                class="w-8 h-8 rounded-full border-2 border-white object-cover mr-3"
+                :src="userImg"
+                alt="User Avatar"
+              />
+              <span class="ml-2 font-medium md:hidden">{{
+                loggedInUsername
+              }}</span>
+              <!-- <svg class="w-4 h-4 ml-1 fill-current" viewBox="0 0 20 20">
                 <path
                   d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                 />
-              </svg>
+              </svg> -->
             </button>
             <transition name="fade">
               <div
@@ -228,7 +235,7 @@
           >
             <img
               class="w-8 h-8 rounded-full border-2 border-white object-cover mr-3"
-              src="https://via.placeholder.com/100"
+              :src="userImg"
               alt="User Avatar"
             />
             <span class="font-medium">{{ loggedInUsername }}</span>
@@ -282,7 +289,8 @@ export default {
       const token = localStorage.getItem("authToken");
       if (token) {
         this.isLoggedIn = true;
-        this.loggedInUsername = localStorage.getItem("username") || "Pengguna";
+        this.loggedInUsername = localStorage.getItem("username");
+        this.userImg = localStorage.getItem("foto");
       } else {
         this.isLoggedIn = false;
         this.loggedInUsername = "Pengguna";
@@ -293,6 +301,7 @@ export default {
       localStorage.removeItem("authToken");
       localStorage.removeItem("username");
       localStorage.removeItem("userData");
+      localStorage.removeItem("foto");
 
       // Hapus sessionStorage jika ada
       sessionStorage.clear();

@@ -1,7 +1,13 @@
 <template>
   <NuxtLink :to="`/produk/${product.id}`" class="block">
-    <div class="bg-white rounded-lg shadow-md overflow-hidden h-full flex flex-col transition-transform hover:scale-[1.02]">
-      <img :src="product.image" :alt="product.nama" class="w-full h-44 object-cover" />
+    <div
+      class="bg-white rounded-lg shadow-md overflow-hidden h-full flex flex-col transition-transform hover:scale-[1.02]"
+    >
+      <img
+        :src="product.image"
+        :alt="product.nama"
+        class="w-full h-44 object-cover"
+      />
       <div class="p-3 flex flex-col flex-grow">
         <h3 class="text-sm font-medium text-gray-800 truncate mb-1">
           {{ product.nama }}
@@ -19,12 +25,16 @@
             <span>{{ product.rating }}</span>
           </div>
           <div class="flex items-center text-gray-500">
-            <svg class="w-3.5 h-3.5 mr-1 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-3.5 h-3.5 mr-1 text-gray-400"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 d="M12 2C8.134 2 5 5.134 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.866-3.134-7-7-7zm0 9.5c-1.379 0-2.5-1.121-2.5-2.5S10.621 6.5 12 6.5s2.5 1.121 2.5 2.5S13.379 11.5 12 11.5z"
               />
             </svg>
-            <span>{{ product.location }}</span>
+            <span>{{ product.lokasi }}</span>
           </div>
         </div>
       </div>
@@ -42,7 +52,7 @@ interface Product {
   harga: number;
   image: string;
   rating: number | string;
-  location: string;
+  lokasi: string;
 }
 
 const props = defineProps<{

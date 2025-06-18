@@ -162,10 +162,12 @@ const loginUser = async () => {
     const nama = res?.name; // Ambil nama pengguna jika tersedia, atau gunakan default
     const token = res?.token;
     const userRole = res?.role; // Contoh: 'petani' atau 'pembeli'
+    const foto = res?.foto;
 
     if (token && userRole) {
       localStorage.setItem("authToken", token);
-      localStorage.setItem("username", nama || "Pengguna");
+      localStorage.setItem("username", nama);
+      localStorage.setItem("foto", foto);
       localStorage.setItem(
         "userData",
         JSON.stringify({ role: userRole, nama: nama })

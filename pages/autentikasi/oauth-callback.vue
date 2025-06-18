@@ -8,11 +8,13 @@ const router = useRouter();
 onMounted(() => {
   const token = route.query.token;
   const role = route.query.role;
-  const name = route.query.name || "Pengguna";
+  const name = route.query.name;
+  const foto = route.query.foto;
 
   if (token && role) {
     localStorage.setItem("authToken", token);
     localStorage.setItem("username", name);
+    localStorage.setItem("foto", foto);
     localStorage.setItem("userData", JSON.stringify({ role, nama: name }));
 
     // Redirect sesuai role
