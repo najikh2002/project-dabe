@@ -174,7 +174,7 @@
           >
             <img
               class="w-8 h-8 rounded-full border-2 border-white object-cover mr-3"
-              src="https://via.placeholder.com/100"
+              :src="userImg"
               alt="User Avatar"
             />
             <span class="font-medium">{{ loggedInUsername }}</span>
